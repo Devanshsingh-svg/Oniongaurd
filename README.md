@@ -1,27 +1,64 @@
-How to open this project in VS Code Wokwi extension
+# 🧅 OnionGuard — Smart IoT & AI Post-Harvest Onion Storage System
 
-1. Install the Wokwi VS Code extension.
-2. Open this folder in VS Code: `wokwi-esp32-project`.
-3. In Command Palette (Ctrl+Shift+P) run: `Wokwi: Open Project` and select `project.json` in this folder, or run `Wokwi: Start Simulation`.
-4. If libraries are missing, add them via the simulator's Libraries UI: `PubSubClient`, `ArduinoJson`, `DHT sensor library`, `Preferences`.
+> An intelligent, low-cost post-harvest storage solution leveraging IoT environmental monitoring and predictive machine learning to detect early rot, optimize airflow, and extend onion shelf life up to 160 days.
 
-PlatformIO (local build)
+---
 
-This repo includes a `platformio.ini` so you can build locally with PlatformIO. Note: the current automated environment does not have PlatformIO or `arduino-cli` installed, so compilation must be run on your machine.
+## 📌 Overview
 
-Install PlatformIO CLI or use VS Code PlatformIO extension, then run from this folder:
+Post-harvest onion loss accounts for substantial agricultural waste due to fungal decay, premature sprouting, and uncontrolled humidity. **OnionGuard** continuously tracks microclimatic variables and volatile gas emissions inside storage structures to alert farmers and automate active ventilation before visible decay spreads.
 
-```powershell
-cd "wokwi-esp32-project"
-pio run
-```
+---
 
-That will fetch the `espressif32` platform and the listed libraries. If you want to just run the serial monitor after flashing/simulation:
+## ⚡ Key Features
 
-```powershell
-pio device monitor -b 115200
-```
+- **Early Rot Prediction:** Detects volatile organic compounds and gases ($H_2S$, $NH_3$, $CO_2$) to forecast spoilage 24–48 hours before physical damage occurs.
+- **Dynamic Microclimate Control:** Automated fan/blower trigger based on configurable temperature and relative humidity (RH) thresholds.
+- **Shelf-Life Estimation:** ML-driven classification (*Healthy*, *At-Risk*, *Spoiled*) calculating remaining safe storage duration.
+- **Farmer-Centric Alerts:** Real-time mobile/web dashboard with SMS notifications and multi-language support.
+- **Off-Grid Compatibility:** Low-power ESP32 architecture optimized for solar panel and battery integration.
 
-Notes:
-- The code targets an ESP32 dev board with DHT22 sensors on GPIO4 and GPIO16, MQ135 on GPIO34, relays on 25/26/27.
-- To simulate sensors in Wokwi, add DHT parts in the wiring editor or use the right-side "Parts" panel.
+---
+
+## 🛠️ System Architecture
+
+### 1. Hardware Layer
+- **Microcontroller:** ESP32 (Wi-Fi / Bluetooth Low Energy)
+- **Climate Monitoring:** DHT22 / BME280 (Temperature & Relative Humidity)
+- **Gas Sensing Array:** 
+  - `MQ-136` / `MQ-137` — Hydrogen Sulfide ($H_2S$) & Ammonia ($NH_3$) detection
+  - `MQ-135` — Air quality and Carbon Dioxide ($CO_2$) concentration
+- **Actuation:** 12V DC / BLDC exhaust ventilation fans via relay module
+- **Power Unit:** 12V solar charge controller with Li-ion battery backup
+
+### 2. Software & Intelligence Layer
+- **Firmware:** C++ / Arduino IDE with FreeRTOS multitasking
+- **Cloud & Backend:** Node.js / FastAPI backend with MQTT / HTTP protocols
+- **Machine Learning:** Random Forest & LSTM models trained on multi-sensor time-series decay data
+- **Frontend / App:** Flutter / React dashboard for real-time visualization and alert logs
+
+---
+
+## 📊 Target Environmental Thresholds
+
+| Parameter | Optimal Range | Warning Trigger | Critical Action |
+| :--- | :--- | :--- | :--- |
+| **Temperature** | 25°C – 30°C | > 32°C | Activate continuous ventilation |
+| **Humidity (RH)** | 65% – 70% | > 75% | Trigger high-speed dehumidifying exhaust |
+| **$H_2S$ Gas Level** | < 0.02 ppm | ≥ 0.05 ppm | Spoilage alert & pinpoint batch inspection |
+| **$CO_2$ Level** | < 600 ppm | > 1000 ppm | Purge storage chamber air |
+
+---
+
+## 🚀 Quick Setup
+
+```bash
+# Clone the repository
+git clone [https://github.com/your-username/OnionGuard.git](https://github.com/your-username/OnionGuard.git)
+
+# Navigate to backend directory
+cd OnionGuard/backend
+
+# Install dependencies and launch
+npm install
+npm run start
