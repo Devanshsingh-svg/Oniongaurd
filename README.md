@@ -1,17 +1,27 @@
-# Oniongaurd
-An offline-first, dual-core ESP32 climate controller designed to retrofit rural onion storage sheds (Kanda Chawl) and prevent post-harvest rot and sprouting.
-Post-harvest onion storage across India faces severe losses every season due to unmonitored temperature spikes, monsoon humidity, and poor ventilation. Traditional farm sheds (Kanda Chawl) rely entirely on guesswork, while commercial cold storage remains out of reach for most smallholders.
+How to open this project in VS Code Wokwi extension
 
-OnionGuard is a low-cost, plug-and-play retrofit system built around a dual-core ESP32 running FreeRTOS. Rather than just acting as a passive dashboard, it handles local physical control autonomously:  
-PDF
+1. Install the Wokwi VS Code extension.
+2. Open this folder in VS Code: `wokwi-esp32-project`.
+3. In Command Palette (Ctrl+Shift+P) run: `Wokwi: Open Project` and select `project.json` in this folder, or run `Wokwi: Start Simulation`.
+4. If libraries are missing, add them via the simulator's Libraries UI: `PubSubClient`, `ArduinoJson`, `DHT sensor library`, `Preferences`.
 
-Runs without internet: Core 1 operates the sensors, rate-of-change cooling logic (dT/dt), and relay switches locally, ensuring storage microclimates are managed even during grid and network outages.  
-PDF
+PlatformIO (local build)
 
-Catches spikes early: Proactively triggers cooling when temperature rises faster than 1.5°C/min instead of waiting for upper thresholds to fail.  
-PDF
+This repo includes a `platformio.ini` so you can build locally with PlatformIO. Note: the current automated environment does not have PlatformIO or `arduino-cli` installed, so compilation must be run on your machine.
 
-Resilient sensing: Employs dual DHT22 sensors with automated divergence failover and a smoothed air-quality proxy to purge stale moisture.  
-PDF
+Install PlatformIO CLI or use VS Code PlatformIO extension, then run from this folder:
 
-Saves bandwidth & data: Implements delta-encoded MQTT to transmit only when parameters shift, while caching dropped packets directly to SPIFFS flash memory during connection dropouts.
+```powershell
+cd "wokwi-esp32-project"
+pio run
+```
+
+That will fetch the `espressif32` platform and the listed libraries. If you want to just run the serial monitor after flashing/simulation:
+
+```powershell
+pio device monitor -b 115200
+```
+
+Notes:
+- The code targets an ESP32 dev board with DHT22 sensors on GPIO4 and GPIO16, MQ135 on GPIO34, relays on 25/26/27.
+- To simulate sensors in Wokwi, add DHT parts in the wiring editor or use the right-side "Parts" panel.
